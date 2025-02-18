@@ -40,8 +40,37 @@ public class Order{
         }
 
 
+  public void generateInvoice(String format) throws IOException {
+  System.out.println("Yogurt Shop Invoice\n");
+        String invoiceContent = "Yogurt Shop Invoice\n";
+        for (Flavour.Flavor flavor : flavors) {
+            invoiceContent += flavor.getName() + " - $" + flavor.getPrice() + "\n";
+        }
+        for (Topping topping : toppings) {
+            invoiceContent += topping.getName() + " - $" + topping.getPrice() + "\n";
+        }
+        invoiceContent += "Subtotal: $" + String.format("%.2f", subtotal) + "\n";
+        invoiceContent += "Tax: $" + String.format("%.2f", subtotal * tax_rate) + "\n";
+        invoiceContent += "Total Amount Due: $" + String.format("%.2f", getTotal()) + "\n";
 
-
+        if ("csv".equalsIgnoreCase(format)) {
+            try (FileWriter writer = new FileWriter("invoice.csv")) {
+                writer.write("Ingredients,Amount,Price\n");
+                for (Flavour.Flavor flavor : flavors) {
+                    writer.write(flavor.getName() + ",1," + flavor.getPrice() + "\n");
+                }
+                for (Topping topping : toppings) {
+                    writer.write(topping.getName() + ",1," + topping.getPrice() + "\n");
+                }
+                writer.write("Subtotal,-," + String.format("%.2f", subtotal) + "\n");
+                writer.write("Tax,-," + String.format("%.2f", subtotal * tax_rate) + "\n");
+                writer.write("Total Amount Due,-," + String.format("%.2f", getTotal()) + "\n");
+            }
+        } else {
+            try (FileWriter writer = new FileWriter("invoice.txt")) {
+                writer.write(invoiceContent);
+            }
+        }}
     }
 
 

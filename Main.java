@@ -48,7 +48,11 @@ public class Main{
         order.setGlassJar(scanner.nextLine().equalsIgnoreCase("yes"));
        double total=order.getTotal();
         System.out.println("Your total price is "+total);
-  
+   System.out.print("Choose invoice format (text/csv): ");
+        String format = scanner.nextLine();
+        order.generateInvoice(format);
+
+        System.out.println("Invoice generated successfully!");
         scanner.close();
     }
 }
